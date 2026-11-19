@@ -1,0 +1,284 @@
+/* Product Families: table view */
+.wrap {
+  overflow-x: auto;
+  border: 1px solid #dfe6f0;
+  border-radius: 16px;
+  background: #fff;
+  box-shadow:
+    0 12px 28px rgba(10, 70, 180, 0.08),
+    0 2px 8px rgba(10, 70, 180, 0.05);
+}
+
+/*
+ * Rows are separate strips with a gap between them (border-spacing), so
+ * each one reads as its own row and can lift out on hover.
+ */
+.table {
+  width: 100%;
+  min-width: 1100px;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  /* Side room so a row enlarged on hover isn't clipped by the scroll box */
+  padding: 0 18px 6px;
+  color: #0c1a33;
+  font-size: 13.5px;
+}
+
+.table th {
+  position: sticky;
+  top: 0;
+  padding: 12px 11px;
+  /* Orange head row, white text */
+  background: #f57c00;
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  text-align: left;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+}
+
+.table td {
+  height: 52px;
+  padding: 10px 11px;
+  /* Row colour (all body rows; the orange head row is separate) */
+  background: #faf0e6;
+  border-top: 1px solid #e3e9f2;
+  border-bottom: 1px solid #e3e9f2;
+  vertical-align: middle;
+  transition: background 0.18s ease;
+}
+
+/* Round the ends of each row strip */
+.table td:first-child {
+  border-left: 1px solid #e3e9f2;
+  border-radius: 12px 0 0 12px;
+}
+
+.table td:last-child {
+  border-right: 1px solid #e3e9f2;
+  border-radius: 0 12px 12px 0;
+}
+
+.table th:first-child {
+  border-radius: 12px 0 0 12px;
+}
+
+.table th:last-child {
+  border-radius: 0 12px 12px 0;
+}
+
+.table tbody tr {
+  position: relative;
+  filter: drop-shadow(0 1px 2px rgba(10, 40, 100, 0.06));
+  transition:
+    transform 0.18s ease,
+    filter 0.18s ease;
+}
+
+/* Hover: the row grows and lifts out as its own card */
+.table tbody tr:hover {
+  z-index: 1;
+  transform: scale(1.025);
+  filter: drop-shadow(0 10px 18px rgba(10, 40, 100, 0.22));
+}
+
+.table tbody tr:hover td {
+  background: #fff7ee;
+  border-color: #f5b46a;
+}
+
+.table tbody tr[data-compared='true'] td {
+  background: #eef5ff;
+}
+
+.num {
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.center {
+  text-align: center !important;
+}
+
+.number {
+  color: #5b6882;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.name {
+  min-width: 210px;
+}
+
+/* Eye button + family name side by side */
+.nameRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Family name: plain text, not clickable */
+.nameText {
+  color: #0c1a33;
+  font: 700 14px/1.35 var(--font-sans);
+}
+
+/* Eye "view" button: the only thing that opens the viewer */
+.viewIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #fff1e2;
+  color: #e06d00;
+  box-shadow: inset 0 0 0 1px #f8cf9f;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.viewIcon:hover {
+  background: #f57c00;
+  color: #ffffff;
+  transform: scale(1.12);
+}
+
+.viewIcon:focus-visible,
+.check:focus-visible {
+  outline: 3px solid #9cc8ff;
+  outline-offset: 2px;
+}
+
+.hits {
+  margin: 5px 0 0;
+  color: #7a5600;
+  font-size: 11.5px;
+  line-height: 1.45;
+}
+
+.hits code {
+  font-family: inherit;
+  font-weight: 700;
+}
+
+.table mark {
+  padding: 0 1px;
+  border-radius: 3px;
+  background: #ffe27a;
+  color: inherit;
+}
+
+.group {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 200px;
+  line-height: 1.3;
+}
+
+.groupIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #f1f4f9;
+  box-shadow: inset 0 0 0 1px #e3e8f0;
+}
+
+.hs {
+  min-width: 150px;
+  max-width: 220px;
+  color: #5b6882;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+.negative {
+  color: #e8231c;
+}
+
+.bars {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 120px;
+}
+
+.barExport,
+.barImport {
+  display: block;
+  min-width: 2px;
+  height: 7px;
+  border-radius: 4px;
+}
+
+.barExport {
+  background: #17701f;
+}
+
+.barImport {
+  background: #c8161d;
+}
+
+/* Export = green, Import = red: same colours as the bars and the key */
+.exportValue {
+  color: #17701f;
+  font-weight: 500;
+}
+
+.importValue {
+  color: #c8161d;
+  font-weight: 500;
+}
+
+/* Export / Import headings stay white on the orange head row */
+.table th.exportHead,
+.table th.importHead {
+  color: #ffffff;
+}
+
+.legend {
+  display: flex;
+  gap: 12px;
+  margin-top: 5px;
+  color: #ffffff;
+  font-size: 10.5px;
+  font-weight: 500;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.legend span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.legend i {
+  display: inline-block;
+  width: 14px;
+  height: 7px;
+  border-radius: 4px;
+}
+
+.check {
+  width: 18px;
+  height: 18px;
+  accent-color: #1f6feb;
+  cursor: pointer;
+}
+
+.check:disabled {
+  cursor: not-allowed;
+}

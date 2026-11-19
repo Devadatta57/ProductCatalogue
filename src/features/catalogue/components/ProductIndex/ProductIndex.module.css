@@ -1,0 +1,416 @@
+/*
+ * Product Index: dark navy panel, white header bar, and each product as its
+ * own rounded light row. On narrow screens the table scrolls sideways.
+ */
+.page {
+  margin: 6px 0 0;
+  padding: clamp(16px, 2.4vw, 28px) clamp(12px, 2vw, 28px) 24px;
+  border-radius: 18px;
+  background: radial-gradient(120% 80% at 50% 0%, #102449 0%, #0b1a35 55%, #08142a 100%);
+  color: #fff;
+}
+
+/* ---------- Type filter + download ---------- */
+.controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 18px;
+  margin-bottom: 16px;
+}
+
+.typeLabel {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  font: 500 16px/1 var(--font-sans);
+}
+
+.select {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.select select {
+  appearance: none;
+  height: 42px;
+  min-width: 170px;
+  padding: 0 40px 0 16px;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 11px;
+  background: #142a52;
+  color: #fff;
+  font: 500 15px/1 var(--font-sans);
+  cursor: pointer;
+}
+
+.select select option {
+  background: #142a52;
+  color: #fff;
+}
+
+.select select:focus-visible {
+  outline: 3px solid #6aa8ff;
+  outline-offset: 2px;
+}
+
+.chevron {
+  position: absolute;
+  right: 14px;
+  pointer-events: none;
+}
+
+/* Own search box (Product Index page) */
+.search {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: 1 1 280px;
+  min-width: 0;
+  max-width: 420px;
+  height: 42px;
+  padding: 0 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 11px;
+  background: #142a52;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.search:focus-within {
+  border-color: #6aa8ff;
+}
+
+.search input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: 0;
+  background: none;
+  color: #fff;
+  font: 400 15px var(--font-sans);
+}
+
+.search input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.download {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  height: 42px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #2a7cf6 0%, #1463e6 100%);
+  color: #fff;
+  font: 500 15px/1 var(--font-sans);
+  cursor: pointer;
+  box-shadow:
+    0 0 0 1px rgba(80, 150, 255, 0.35),
+    0 10px 26px -6px rgba(30, 110, 255, 0.65);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.download:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px rgba(80, 150, 255, 0.45),
+    0 14px 30px -6px rgba(30, 110, 255, 0.75);
+}
+
+.download:focus-visible {
+  outline: 3px solid #9cc8ff;
+  outline-offset: 3px;
+}
+
+/* ---------- Table ---------- */
+/* Side/bottom room so a row enlarged on hover isn't clipped by the scroll box */
+.tableWrap {
+  overflow-x: auto;
+  margin: 0 -4px;
+  padding: 0 16px 8px;
+}
+
+.table {
+  width: 100%;
+  min-width: 940px;
+  border-collapse: separate;
+  border-spacing: 0 8px;
+  color: #0c1a33;
+  font: 400 14px/1.3 var(--font-sans);
+}
+
+.table th,
+.table td {
+  padding: 7px 12px;
+  text-align: left;
+  vertical-align: middle;
+}
+
+.table thead th {
+  height: 42px;
+  /* Yellow head row, dark text */
+  background: #ffd23f;
+  box-shadow: 1px 0 0 #ffd23f;
+  color: #0c1a33;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.table tbody td {
+  /* Body rows: white (head row is yellow) */
+  --row-bg: #ffffff;
+  height: 42px;
+  background: var(--row-bg);
+  /* Covers hairline seams between cells at fractional widths */
+  box-shadow: 1px 0 0 var(--row-bg);
+  border-top: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+}
+
+/* Rounded ends on every row */
+.table tr > :first-child {
+  padding-left: 18px;
+  border-left: 1px solid #fff;
+  border-radius: 12px 0 0 12px;
+}
+
+.table tr > :last-child {
+  border-right: 1px solid #fff;
+  border-radius: 0 12px 12px 0;
+}
+
+.table thead tr > * {
+  border: 0;
+}
+
+.table thead tr {
+  box-shadow: 0 6px 18px -8px rgba(0, 0, 0, 0.5);
+}
+
+.table tbody td {
+  transition: background 0.18s ease;
+}
+
+.table tbody tr {
+  position: relative;
+  transition:
+    transform 0.18s ease,
+    filter 0.18s ease;
+}
+
+/* Hover: the row grows and lifts out as its own card */
+.table tbody tr:hover {
+  z-index: 1;
+  transform: scale(1.025);
+  filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
+}
+
+/* Light blue to match the page's navy/blue design (Download button blue) */
+.table tbody tr:hover td {
+  --row-bg: #e3efff;
+  border-color: #7fb2ff;
+}
+
+/* "No products found" row doesn't move */
+.table tbody tr:has(td.empty):hover {
+  transform: none;
+  filter: none;
+}
+
+.sortBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.num .sortBtn {
+  margin-left: auto;
+}
+
+.arrow {
+  font-size: 10px;
+}
+
+.hsn {
+  width: 96px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* One line per product; the full name shows on hover */
+.product {
+  max-width: 300px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.num {
+  width: 104px;
+  text-align: right !important;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+/* ---------- Type pill ---------- */
+.type {
+  display: inline-block;
+  min-width: 86px;
+  padding: 4px 10px;
+  border-radius: 8px;
+  background: linear-gradient(180deg, #0f7a2a 0%, #0b5e20 100%);
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 500;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.18);
+}
+
+.type[data-type='Fresh / Raw'] {
+  background: linear-gradient(180deg, #2a86ff 0%, #0e63ea 100%);
+}
+
+.type[data-type='Value-added'] {
+  background: linear-gradient(180deg, #b0701a 0%, #8a5310 100%);
+}
+
+.type[data-type='Input'] {
+  background: linear-gradient(180deg, #6a5bd0 0%, #4a3cad 100%);
+}
+
+/* ---------- Net + catalogue sheet ---------- */
+
+.netCol {
+  width: 128px;
+}
+
+.net {
+  display: block;
+}
+
+.net[data-negative='true'] {
+  color: #e8231c;
+}
+
+.sheetCol {
+  max-width: 280px;
+  padding-left: 20px !important;
+}
+
+/* Eye button + sheet name side by side */
+.sheetRow {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Sheet name: plain text, not clickable */
+.sheetName {
+  overflow: hidden;
+  color: #0c1a33;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Eye "view" button: the only thing that opens the sheet */
+.viewIcon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #dceaff;
+  color: #1463e6;
+  box-shadow: inset 0 0 0 1px #a9c9fb;
+  cursor: pointer;
+  transition:
+    background 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.viewIcon:hover {
+  background: #1463e6;
+  color: #ffffff;
+  transform: scale(1.12);
+}
+
+.viewIcon:focus-visible {
+  outline: 3px solid #6aa8ff;
+  outline-offset: 2px;
+}
+
+.sheets {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3px;
+}
+
+.info {
+  margin: -4px 0 12px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+
+.info b {
+  color: #fff;
+}
+
+.table mark {
+  padding: 0 1px;
+  border-radius: 3px;
+  background: #ffe27a;
+  color: inherit;
+}
+
+.table tbody td.empty {
+  height: auto;
+  padding: 28px 16px;
+  color: #3b4a66;
+  text-align: center;
+}
+
+.empty b {
+  display: block;
+  margin-bottom: 4px;
+  color: #0c1a33;
+  font-size: 15px;
+}
+
+@media (max-width: 640px) {
+  .page {
+    margin: 4px calc(-1 * var(--gutter, 16px)) 0;
+    border-radius: 0;
+  }
+
+  .typeLabel {
+    flex: 1 1 100%;
+    justify-content: space-between;
+  }
+
+  .select,
+  .select select {
+    flex: 1;
+  }
+}

@@ -1,0 +1,307 @@
+/*
+ * Toolbar: compact blue glow pills + white search capsule.
+ * Row 1: section tabs (left) + sort / layout (right).
+ * Row 2: search, full width — sits between the buttons and the group list.
+ * ≤640px: tabs scroll sideways, then sort + icon-only views, then search.
+ */
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 14px 10px;
+}
+
+.tabs,
+.controls,
+.views {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex: none;
+}
+
+.controls {
+  margin-left: auto;
+}
+
+/* Section buttons sit on a dark green strip that fills the whole row */
+.tabs {
+  flex: 1 1 100%;
+  min-width: 0;
+  padding: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--color-green-900);
+  box-shadow: 0 8px 18px -10px rgba(15, 61, 26, 0.6);
+}
+
+/* The three buttons share the strip's width equally */
+.tabs > .pill {
+  flex: 1 1 0;
+}
+
+/* ---------- Pill button: light green, blue once selected ---------- */
+.pill {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 42px;
+  padding: 0 16px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: #add870;
+  /* Dark text: white is hard to read on light green */
+  color: var(--color-green-900);
+  font: 700 15px/1 var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow:
+    0 8px 16px -8px rgba(0, 0, 0, 0.5),
+    0 2px 4px rgba(0, 0, 0, 0.14);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    background 0.15s ease;
+}
+
+.pill:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 11px 20px -8px rgba(0, 0, 0, 0.55),
+    0 2px 6px rgba(0, 0, 0, 0.18);
+}
+
+.pill:active {
+  transform: translateY(0);
+}
+
+.pill:focus-visible,
+.sort:has(select:focus-visible) {
+  outline: 3px solid #9cc8ff;
+  outline-offset: 2px;
+}
+
+/* Current section: blue */
+.pill[aria-pressed='true'] {
+  background: linear-gradient(180deg, var(--color-blue-400) 0%, var(--color-blue-500) 55%, #0572f2 100%);
+  color: var(--color-white);
+  box-shadow:
+    0 8px 16px -8px rgba(0, 110, 255, 0.55),
+    0 2px 4px rgba(0, 90, 220, 0.14);
+}
+
+.badge {
+  display: inline-grid;
+  place-items: center;
+  min-width: 26px;
+  height: 24px;
+  padding: 0 8px;
+  margin-right: -6px;
+  border-radius: var(--radius-pill);
+  background: var(--color-amber-400);
+  color: var(--color-white);
+  font-size: 13.5px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Search capsule ---------- */
+.search {
+  flex: 1 1 100%;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 50px;
+  padding: 0 6px 0 18px;
+  background: var(--color-white);
+  border: 2px solid #edf5ff;
+  border-radius: var(--radius-pill);
+  /* Softer blue glow: still visible, no longer heavy underneath */
+  box-shadow:
+    0 0 0 1px rgba(0, 110, 255, 0.16),
+    0 0 10px rgba(0, 110, 255, 0.16),
+    0 6px 10px -5px rgba(3, 47, 215, 0.42);
+  transition: box-shadow 0.2s ease;
+}
+
+.search:focus-within {
+  box-shadow:
+    0 0 0 2px rgba(0, 110, 255, 0.32),
+    0 0 14px rgba(0, 110, 255, 0.22),
+    0 8px 12px -5px rgba(3, 47, 215, 0.5);
+}
+
+.searchIcon {
+  flex: none;
+  color: var(--color-search-ink);
+}
+
+.searchInput {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  background: transparent;
+  outline: none;
+  font: 500 15px/1.2 var(--font-sans);
+  color: var(--color-search-ink);
+  text-overflow: ellipsis;
+}
+
+.searchInput::placeholder {
+  color: var(--color-search-ink);
+  opacity: 1;
+}
+
+.searchInput::-webkit-search-cancel-button {
+  cursor: pointer;
+}
+
+.send {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: linear-gradient(180deg, var(--color-blue-400) 0%, var(--color-blue-500) 55%, #0572f2 100%);
+  color: var(--color-white);
+  box-shadow: 0 5px 10px -5px rgba(0, 110, 255, 0.7);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.send:hover {
+  background: linear-gradient(180deg, #0a74f2 0%, var(--color-blue-600) 60%, #045fd8 100%);
+}
+
+.send svg {
+  transition: transform 0.15s ease;
+}
+
+.send:hover svg {
+  transform: translateX(2px);
+}
+
+.send:focus-visible {
+  outline: 3px solid #9cc8ff;
+  outline-offset: 2px;
+}
+
+/* ---------- Sort dropdown (native select dressed as a pill) ---------- */
+.sort {
+  padding: 0;
+}
+
+.sort select {
+  appearance: none;
+  height: 100%;
+  padding: 0 40px 0 18px;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+  outline: none;
+}
+
+.sort option {
+  color: var(--color-search-ink);
+  background: var(--color-white);
+  font-weight: 500;
+}
+
+.chevron {
+  position: absolute;
+  right: 16px;
+  pointer-events: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* ---------- Phone ---------- */
+@media (max-width: 640px) {
+  .toolbar,
+  .tabs,
+  .controls,
+  .views {
+    gap: 8px;
+  }
+
+  .toolbar {
+    row-gap: 10px;
+  }
+
+  /* Tabs scroll sideways; padding keeps the glow from being clipped */
+  /* Full-width green strip; buttons scroll sideways inside it */
+  .tabs {
+    width: calc(100% + 32px);
+    margin: -4px -16px 0;
+    padding: 8px 16px;
+    border-radius: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  /* Never squash a label: fill the strip, scroll if they don't fit */
+  .tabs > .pill {
+    flex: 1 0 auto;
+  }
+
+  .tabs::-webkit-scrollbar {
+    display: none;
+  }
+
+  .search {
+    height: 48px;
+    padding-left: 14px;
+    gap: 8px;
+  }
+
+  /* 16px stops iOS from zooming in on focus */
+  .searchInput {
+    font-size: 16px;
+  }
+
+  .send {
+    width: 36px;
+    height: 36px;
+  }
+
+  .controls {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .sort {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .sort select {
+    width: 100%;
+    text-overflow: ellipsis;
+  }
+
+  .view {
+    width: 42px;
+    padding: 0;
+  }
+
+  .viewLabel {
+    display: none;
+  }
+}

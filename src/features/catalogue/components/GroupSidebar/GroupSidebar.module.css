@@ -1,0 +1,172 @@
+/*
+ * Product groups block: white card, header row, then 10 rectangular tiles
+ * (5 × 2 on desktop, fewer per row on smaller screens).
+ */
+.panel {
+  padding: 14px 16px 16px;
+  background: var(--color-white);
+  /* No border line: just a soft light shadow around the groups block */
+  border: 0;
+  border-radius: 18px;
+  box-shadow:
+    0 14px 34px rgba(0, 0, 0, 0.1),
+    0 3px 10px rgba(0, 0, 0, 0.06);
+}
+
+/* ---------- Header row ---------- */
+.head {
+  display: flex;
+  margin-bottom: 12px;
+}
+
+.all {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 6px 0 14px;
+  border: 1.5px solid #cfe0fb;
+  border-radius: var(--radius-pill);
+  background: #f2f7ff;
+  color: var(--color-navy-800);
+  font: 700 13.5px/1 var(--font-sans);
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.all:hover {
+  background: #e4efff;
+}
+
+/* Selected: same blue as the selected toolbar button */
+.all[aria-pressed='true'] {
+  border-color: transparent;
+  background: linear-gradient(180deg, var(--color-blue-400) 0%, var(--color-blue-500) 55%, #0572f2 100%);
+  color: var(--color-white);
+}
+
+/* ---------- Tiles ---------- */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tile {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+  min-height: 58px;
+  padding: 9px 10px 9px 11px;
+  border: 0;
+  border-radius: 12px;
+  background: linear-gradient(180deg, #124083 0%, var(--color-navy-800) 50%, var(--color-navy-900) 100%);
+  color: var(--color-white);
+  font: 500 13.5px/1.25 var(--font-sans);
+  text-align: left;
+  cursor: pointer;
+  box-shadow:
+    inset 0 1px 0 rgba(255, 255, 255, 0.08),
+    inset 0 -2px 0 rgba(0, 0, 0, 0.2),
+    0 2px 5px rgba(10, 40, 100, 0.18);
+  transition:
+    background 0.15s ease,
+    transform 0.15s ease;
+}
+
+.tile:hover {
+  background: linear-gradient(180deg, #1a4d99 0%, #134288 50%, #0e3776 100%);
+  transform: translateY(-1px);
+}
+
+.tile:focus-visible,
+.all:focus-visible {
+  outline: 3px solid #9cc8ff;
+  outline-offset: 2px;
+}
+
+/* Selected group: toolbar's selected blue, group-colour edge, amber count */
+.tile[aria-pressed='true'],
+.tile[aria-pressed='true']:hover {
+  background: linear-gradient(180deg, var(--color-blue-400) 0%, var(--color-blue-500) 55%, #0572f2 100%);
+  box-shadow:
+    inset 0 0 0 2px var(--group-color),
+    0 6px 14px -6px rgba(10, 40, 100, 0.5);
+}
+
+.tile[aria-pressed='true'] .count,
+.all[aria-pressed='true'] .count {
+  background: var(--color-amber-400);
+}
+
+/* Group's icon in its own colour on a white disc */
+.icon {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--group-color, var(--color-navy-800));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+}
+
+.count {
+  flex: none;
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 24px;
+  padding: 0 7px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--color-white);
+  font-size: 13px;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.all .count {
+  background: var(--color-navy-800);
+}
+
+/* ---------- Smaller screens ---------- */
+@media (max-width: 1100px) {
+  .grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .panel {
+    padding: 12px;
+  }
+
+  .grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .tile {
+    min-height: 54px;
+    gap: 8px;
+    padding: 8px;
+    font-size: 12.5px;
+  }
+
+  .icon {
+    width: 28px;
+    height: 28px;
+  }
+}

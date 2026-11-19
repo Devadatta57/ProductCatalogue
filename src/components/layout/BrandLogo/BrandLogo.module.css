@@ -1,0 +1,33 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+}
+
+.mark {
+  width: 58px;
+  height: 53px;
+  flex-shrink: 0;
+}
+
+.text {
+  display: flex;
+  flex-direction: column;
+  line-height: 1;
+}
+
+.name {
+  font-size: 38px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: var(--color-green-700);
+}
+
+.tagline {
+  margin-top: 3px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--color-green-800);
+}

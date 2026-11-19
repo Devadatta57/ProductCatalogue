@@ -1,0 +1,31 @@
+.page {
+  min-height: 100svh;
+  padding: 20px clamp(16px, 2.2vw, 36px) 48px;
+  background: var(--color-white);
+}
+
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 42px;
+  margin-bottom: 16px;
+  padding: 0 20px 0 12px;
+  border: 0;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, var(--color-blue-400) 0%, var(--color-blue-500) 55%, #0572f2 100%);
+  color: var(--color-white);
+  font: 700 14.5px/1 var(--font-sans);
+  cursor: pointer;
+  box-shadow: 0 8px 16px -8px rgba(0, 110, 255, 0.55);
+  transition: transform 0.15s ease;
+}
+
+.back:hover {
+  transform: translateX(-2px);
+}
+
+.back:focus-visible {
+  outline: 3px solid #9cc8ff;
+  outline-offset: 2px;
+}
