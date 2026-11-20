@@ -128,12 +128,13 @@ export default function ProductIndex({
 
       <div className={styles.controls}>
         <label className={styles.typeLabel}>
-          <span>Type:</span>
+          <span>Group:</span>
           <span className={styles.select}>
-            <select value={type} onChange={(event) => setType(event.target.value)}>
-              {typeOptions.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
+            <select value={activeGroup} onChange={(event) => onGroupChange(event.target.value)}>
+              <option value="all">All groups</option>
+              {groups.map((group) => (
+                <option key={group.id} value={group.id}>
+                  {group.name}
                 </option>
               ))}
             </select>
@@ -142,13 +143,12 @@ export default function ProductIndex({
         </label>
 
         <label className={styles.typeLabel}>
-          <span>Group:</span>
+          <span>Type:</span>
           <span className={styles.select}>
-            <select value={activeGroup} onChange={(event) => onGroupChange(event.target.value)}>
-              <option value="all">All groups</option>
-              {groups.map((group) => (
-                <option key={group.id} value={group.id}>
-                  {group.name}
+            <select value={type} onChange={(event) => setType(event.target.value)}>
+              {typeOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
                 </option>
               ))}
             </select>
