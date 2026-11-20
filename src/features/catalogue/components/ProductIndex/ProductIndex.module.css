@@ -61,42 +61,9 @@
   pointer-events: none;
 }
 
-/* Own search box (Product Index page) */
-.search {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  flex: 1 1 280px;
-  min-width: 0;
-  max-width: 420px;
-  height: 42px;
-  padding: 0 14px;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 11px;
-  background: #142a52;
-  color: rgba(255, 255, 255, 0.7);
-}
-
-.search:focus-within {
-  border-color: #6aa8ff;
-}
-
-.search input {
-  flex: 1;
-  min-width: 0;
-  height: 100%;
-  border: 0;
-  outline: 0;
-  background: none;
-  color: #fff;
-  font: 400 15px var(--font-sans);
-}
-
-.search input::placeholder {
-  color: rgba(255, 255, 255, 0.5);
-}
-
+/* Pushed to the right end of the controls row */
 .download {
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 10px;
@@ -138,7 +105,7 @@
 
 .table {
   width: 100%;
-  min-width: 940px;
+  min-width: 1020px;
   border-collapse: separate;
   border-spacing: 0 8px;
   color: #0c1a33;
@@ -209,6 +176,11 @@
   z-index: 1;
   transform: scale(1.025);
   filter: drop-shadow(0 10px 18px rgba(0, 0, 0, 0.45));
+}
+
+/* Rows whose product family is ticked for Compare (hover still wins below) */
+.table tbody tr[data-compared='true'] td {
+  --row-bg: #eef5ff;
 }
 
 /* Light blue to match the page's navy/blue design (Download button blue) */
@@ -364,6 +336,43 @@
   flex-direction: column;
   align-items: flex-start;
   gap: 3px;
+}
+
+/* ---------- Compare ---------- */
+.compareCol {
+  width: 92px;
+  text-align: center !important;
+}
+
+/* Same 26px line height and 3px gap as the family names, so ticks line up */
+.compareStack {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+}
+
+.compareCell {
+  display: grid;
+  place-items: center;
+  height: 26px;
+}
+
+.check {
+  width: 18px;
+  height: 18px;
+  margin: 0;
+  accent-color: #1463e6;
+  cursor: pointer;
+}
+
+.check:disabled {
+  cursor: not-allowed;
+}
+
+.check:focus-visible {
+  outline: 3px solid #6aa8ff;
+  outline-offset: 2px;
 }
 
 .info {

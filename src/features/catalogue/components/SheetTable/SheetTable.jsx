@@ -1,6 +1,5 @@
 import Icon from '@/components/common/Icon';
 import { sheetNumber } from '../../utils/formatters';
-import { SHOW_COMPARE_IN_TABLE } from '../../config/visibility';
 import Highlight from '../Highlight';
 import styles from './SheetTable.module.css';
 
@@ -44,7 +43,7 @@ export default function SheetTable({ results, query, groupsById, compareIds, com
                 </span>
               </span>
             </th>
-            {SHOW_COMPARE_IN_TABLE && <th className={styles.center}>Compare</th>}
+            <th className={styles.center}>Compare</th>
           </tr>
         </thead>
         <tbody>
@@ -109,19 +108,17 @@ export default function SheetTable({ results, query, groupsById, compareIds, com
                     <span className={styles.barImport} style={{ width: `${(sheet.imp / max) * 100}%` }} />
                   </span>
                 </td>
-                {SHOW_COMPARE_IN_TABLE && (
-                  <td className={styles.center}>
-                    <input
-                      type="checkbox"
-                      className={styles.check}
-                      checked={compared}
-                      disabled={disabled}
-                      onChange={() => onToggleCompare(sheet.n)}
-                      title={disabled ? `Compare holds up to ${compareLimit} product families` : undefined}
-                      aria-label={`Compare ${sheet.name}`}
-                    />
-                  </td>
-                )}
+                <td className={styles.center}>
+                  <input
+                    type="checkbox"
+                    className={styles.check}
+                    checked={compared}
+                    disabled={disabled}
+                    onChange={() => onToggleCompare(sheet.n)}
+                    title={disabled ? `Compare holds up to ${compareLimit} product families` : undefined}
+                    aria-label={`Compare ${sheet.name}`}
+                  />
+                </td>
               </tr>
             );
           })}

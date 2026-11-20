@@ -10,7 +10,7 @@ export default defineConfig({
       '@': fileURLToPath(new URL('./src', import.meta.url)),
     },
   },
-  // localhost only: no "Network:" URL, not reachable from other devices on Wi-Fi
-  server: { port: 5174 },
-  preview: { port: 4174 },
+  // host: true listens on all interfaces, so phones/PCs on the same Wi-Fi can open the "Network:" URL
+  server: { port: 5174, host: true },
+  preview: { port: 4174, host: true },
 });

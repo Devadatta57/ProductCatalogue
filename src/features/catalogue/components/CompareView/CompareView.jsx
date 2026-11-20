@@ -33,7 +33,8 @@ export default function CompareView({ compareIds, compareLimit, groupsById, onTo
       />
 
       <p className={styles.info} aria-live="polite">
-        Tick “Compare” on any product family card (up to {compareLimit}). Selected: <b>{sheets.length}</b>
+        Tick “Compare” on any product family card or in the Product Index (up to {compareLimit}). Selected:{' '}
+        <b>{sheets.length}</b>
       </p>
 
       {sheets.length === 0 ? (

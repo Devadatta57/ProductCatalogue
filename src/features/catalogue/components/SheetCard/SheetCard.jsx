@@ -1,13 +1,8 @@
-import Icon from '@/components/common/Icon';
 import { formatRupees, sheetNumber } from '../../utils/formatters';
-import { SHOW_COMPARE_ON_CARDS, SHOW_PRODUCT_INDEX_LABEL } from '../../config/visibility';
+import Icon from '../../../../components/common/Icon/Icon';
 import styles from './SheetCard.module.css';
 
 const MAX_HITS_SHOWN = 3;
-
-/* Show / hide switches live in config/visibility.js */
-const SHOW_PRODUCT_INDEX = SHOW_PRODUCT_INDEX_LABEL;
-const SHOW_COMPARE = SHOW_COMPARE_ON_CARDS;
 
 export default function SheetCard({
   sheet,
@@ -25,6 +20,8 @@ export default function SheetCard({
 
   return (
     <article className={styles.card} style={{ '--group-color': group.color }} aria-labelledby={`sheet-${sheet.n}-title`}>
+      <span className={styles.count}>{sheet.products.length} products</span>
+
       <header className={styles.head}>
         <div className={styles.groupRow}>
           <span className={styles.number} aria-hidden="true">
@@ -35,11 +32,11 @@ export default function SheetCard({
           </p>
         </div>
         <h3 id={`sheet-${sheet.n}-title`} className={styles.title}>
-          <span className={SHOW_PRODUCT_INDEX ? undefined : styles.srOnly}>Product family {number}: </span>
+          <span>Product family {number}: </span>
           {sheet.name}
         </h3>
         <p className={styles.meta}>
-          {sheet.hs} · {sheet.products.length} products
+          {sheet.hs}
         </p>
       </header>
 
@@ -61,32 +58,23 @@ export default function SheetCard({
             />
           )}
         </div>
-
-        <div className={styles.brandRow}>
-          <span className={styles.brand}>
-            <Icon name="globe" size={17} strokeWidth={2} className={styles.globe} />
-            FEED MSCS LTD.
-          </span>
-        </div>
       </div>
 
       <div className={styles.info}>
-        {SHOW_COMPARE && (
-          <label
-            className={styles.compare}
-            htmlFor={compareId}
-            title={compareDisabled ? 'Compare holds up to 6 product families' : undefined}
-          >
-            <input
-              id={compareId}
-              type="checkbox"
-              checked={compared}
-              disabled={compareDisabled}
-              onChange={() => onToggleCompare(sheet.n)}
-            />
-            Compare
-          </label>
-        )}
+        <label
+          className={styles.compare}
+          htmlFor={compareId}
+          title={compareDisabled ? 'Compare holds up to 6 product families' : undefined}
+        >
+          <input
+            id={compareId}
+            type="checkbox"
+            checked={compared}
+            disabled={compareDisabled}
+            onChange={() => onToggleCompare(sheet.n)}
+          />
+          Compare
+        </label>
 
         {hits.length > 0 && (
           <ul className={styles.hits} aria-label="Matching products">
@@ -99,20 +87,31 @@ export default function SheetCard({
           </ul>
         )}
 
-        <dl className={styles.stats}>
-          <div className={styles.stat}>
-            <dt>Export</dt>
-            <dd className={styles.export}>{formatRupees(sheet.exp)}</dd>
-          </div>
-          <div className={styles.stat}>
-            <dt>Import</dt>
-            <dd className={styles.import}>{formatRupees(sheet.imp)}</dd>
-          </div>
-          <div className={styles.stat}>
-            <dt>Net</dt>
-            <dd className={net < 0 ? styles.import : styles.net}>{formatRupees(net)}</dd>
-          </div>
-        </dl>
+        <div className={styles.statsWrap}>
+          <dl className={styles.stats}>
+            <div className={`${styles.stat} ${styles.statExport}`}>
+              <dt>
+                <Icon name="tradeExport" size="1em" className={styles.statIcon} />
+                Export
+              </dt>
+              <dd className={styles.export}>{formatRupees(sheet.exp)}</dd>
+            </div>
+            <div className={`${styles.stat} ${styles.statImport}`}>
+              <dt>
+                <Icon name="tradeImport" size="1em" className={styles.statIcon} />
+                Import
+              </dt>
+              <dd className={styles.import}>{formatRupees(sheet.imp)}</dd>
+            </div>
+            <div className={`${styles.stat} ${net < 0 ? styles.statImport : styles.statNet}`}>
+              <dt>
+                <Icon name="tradeNet" size="1em" className={styles.statIcon} />
+                Net
+              </dt>
+              <dd className={net < 0 ? styles.import : styles.net}>{formatRupees(net)}</dd>
+            </div>
+          </dl>
+        </div>
       </div>
     </article>
   );

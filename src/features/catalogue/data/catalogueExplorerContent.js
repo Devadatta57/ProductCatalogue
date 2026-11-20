@@ -2,18 +2,15 @@
  * Toolbar + product-group content, taken from the FEED Export Catalogue
  * Explorer (FY 2025-26, FEED KYJ product master list).
  */
-import { ENABLE_COMPARE_TAB, ENABLE_PRODUCT_INDEX_TAB } from '../config/visibility';
-
 export const catalogueTotals = {
   sheets: 56,
   products: 461, // unique HSN codes across all product families
 };
 
-/* All tabs always show; `enabled: false` means clicking it does nothing (see config/visibility.js) */
 export const catalogueTabs = [
-  { id: 'sheets', label: 'Product Families', icon: 'sheets', countKey: 'sheets', enabled: true },
-  { id: 'products', label: 'Product Index', icon: 'productIndex', countKey: 'products', enabled: ENABLE_PRODUCT_INDEX_TAB },
-  { id: 'compare', label: 'Compare', icon: 'compare', countKey: 'compare', enabled: ENABLE_COMPARE_TAB },
+  { id: 'sheets', label: 'Product Families', icon: 'sheets', countKey: 'sheets' },
+  { id: 'products', label: 'Product Index', icon: 'productIndex', countKey: 'products' },
+  { id: 'compare', label: 'Compare', icon: 'compare', countKey: 'compare' },
 ];
 
 export const searchPlaceholder =

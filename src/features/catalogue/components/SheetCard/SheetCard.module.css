@@ -45,13 +45,37 @@
 
 /* ---------- White top panel (soft shade lifts it off the tinted card) ---------- */
 .panel {
-  padding: 7px 7px 0;
+  position: relative;
+  padding: 7px;
   background: var(--color-white);
   border-radius: 16px;
   box-shadow:
     0 0 0 1px rgba(15, 23, 42, 0.05),
     0 2px 4px rgba(15, 23, 42, 0.06),
     0 6px 16px -4px rgba(15, 23, 42, 0.12);
+  transition:
+    transform 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.2),
+    box-shadow 0.35s ease;
+}
+
+/* Hovering the image: it lifts out of the card toward the viewer */
+.card:has(.thumb:hover) {
+  z-index: 5;
+}
+
+.panel:has(.thumb:hover) {
+  z-index: 4;
+  transform: scale(1.1) translateY(-4px);
+  box-shadow:
+    0 0 0 1px rgba(15, 23, 42, 0.06),
+    0 10px 20px rgba(15, 23, 42, 0.18),
+    0 28px 50px -10px rgba(15, 23, 42, 0.4);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .panel:has(.thumb:hover) {
+    transform: none;
+  }
 }
 
 /* Image sits in its own frame with a light shade, so its edge reads clearly */
@@ -112,6 +136,8 @@
   display: flex;
   align-items: center;
   gap: 0.6em;
+  /* Leave room for the product tag in the top-right corner */
+  padding-right: clamp(84px, 28cqi, 120px);
 }
 
 .number {
@@ -127,29 +153,27 @@
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
 }
 
-.brandRow {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  padding: clamp(6px, 2cqi, 9px) clamp(10px, 3.4cqi, 16px);
-  font-size: clamp(11.5px, 3.6cqi, 15px);
+/*
+ * Product count tag, tucked into the card's top-right corner. It follows the
+ * card's rounded corner and takes the group colour, like the number badge.
+ */
+.count {
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  z-index: 3;
+  padding: 0.5em 1em 0.5em 1.1em;
+  border-radius: 0 22px 0 14px;
+  background: linear-gradient(135deg, var(--group-color), color-mix(in srgb, var(--group-color) 72%, #000));
+  color: var(--color-white);
+  font-size: clamp(11px, 3.2cqi, 14px);
   font-weight: 700;
-  color: #1a2233;
-}
-
-.brand {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  min-width: 0;
-  margin: 0 auto;
+  line-height: 1.2;
+  letter-spacing: 0.02em;
   white-space: nowrap;
-}
-
-.globe {
-  flex: none;
-  color: #1a8a2e;
+  font-variant-numeric: tabular-nums;
+  box-shadow: -2px 2px 6px rgba(0, 0, 0, 0.2);
+  pointer-events: none;
 }
 
 /* Compare: square checkbox like the design */
@@ -269,36 +293,201 @@
   color: #7a5600;
 }
 
-/* Three white figure boxes, pinned to the bottom so rows line up */
+/* Figures block, pinned to the bottom of the card so rows line up */
+.statsWrap {
+  margin-top: auto;
+  padding-top: clamp(3px, 1.2cqi, 6px);
+}
+
+/*
+ * Export, Import, Net stacked one below the other: no box, no dividers.
+ * Each row: icon + label on the left, figure on the right.
+ */
+/*
+ * Rows are kept tight (no vertical padding, small type) so the three of them
+ * take about the same height the old single Export | Import | Net box did:
+ * the card does not grow.
+ */
 .stats {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: clamp(6px, 2cqi, 10px);
-  margin: auto 0 0;
-  padding-top: clamp(10px, 3cqi, 14px);
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  margin: 0;
 }
 
 .stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6em;
   min-width: 0;
-  padding: clamp(6px, 2cqi, 10px) clamp(6px, 2.2cqi, 14px);
-  background: var(--color-white);
-  border-radius: 12px;
-  box-shadow:
-    0 1px 2px rgba(0, 0, 0, 0.05),
-    0 4px 12px rgba(0, 0, 0, 0.06);
+  padding: 0 clamp(4px, 1.4cqi, 8px);
+  border-radius: 6px;
+  transition:
+    background-color 0.18s ease,
+    transform 0.18s ease,
+    box-shadow 0.18s ease;
 }
 
+/* Hovering a row enlarges just that row and tints it in its own colour */
+.stat:hover {
+  position: relative;
+  z-index: 1;
+  transform: scale(1.08);
+  background: color-mix(in srgb, var(--stat-color) 12%, var(--color-white));
+  box-shadow: 0 4px 12px -4px color-mix(in srgb, var(--stat-color) 45%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat:hover {
+    transform: none;
+  }
+}
+
+/* ---------- Icon animations, always playing ---------- */
+.statIcon [data-part] {
+  transform-box: view-box;
+}
+
+/* Export: the ship sails and bobs while the waves roll past */
+.statIcon [data-part='ship'] {
+  transform-origin: 12px 16px;
+}
+
+.statExport .statIcon [data-part='ship'] {
+  animation: shipSail 1.6s ease-in-out infinite;
+}
+
+.statExport .statIcon [data-part='waves'] {
+  animation: wavesRoll 0.9s linear infinite;
+}
+
+@keyframes shipSail {
+  0%,
+  100% {
+    transform: translate(-1px, 0) rotate(-3deg);
+  }
+  50% {
+    transform: translate(1px, -1px) rotate(3deg);
+  }
+}
+
+@keyframes wavesRoll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-6px);
+  }
+}
+
+/* Import: the crane lowers the container, then lifts it back up */
+.statIcon [data-part='rope'] {
+  transform-origin: 12px 1px;
+}
+
+.statImport .statIcon [data-part='load'] {
+  animation: loadLower 1.8s ease-in-out infinite;
+}
+
+.statImport .statIcon [data-part='rope'] {
+  animation: ropeStretch 1.8s ease-in-out infinite;
+}
+
+@keyframes loadLower {
+  0%,
+  15%,
+  100% {
+    transform: translateY(0);
+  }
+  55%,
+  70% {
+    transform: translateY(2.5px);
+  }
+}
+
+/* Rope is 3.6 units long; +2.5 when the load is down => scale 6.1 / 3.6 */
+@keyframes ropeStretch {
+  0%,
+  15%,
+  100% {
+    transform: scaleY(1);
+  }
+  55%,
+  70% {
+    transform: scaleY(1.7);
+  }
+}
+
+/* Net: the beam tips one way, then the other, like it is weighing */
+.statIcon [data-part='beam'] {
+  transform-origin: 12px 7.3px;
+}
+
+.statNet .statIcon [data-part='beam'],
+.statImport .statIcon [data-part='beam'] {
+  animation: beamWeigh 1.8s ease-in-out infinite;
+}
+
+@keyframes beamWeigh {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-10deg);
+  }
+  60% {
+    transform: rotate(7deg);
+  }
+  80% {
+    transform: rotate(-3deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stat .statIcon [data-part] {
+    animation: none;
+  }
+}
+
+.statExport {
+  --stat-color: #19801f;
+}
+
+.statImport {
+  --stat-color: #e3141c;
+}
+
+.statNet {
+  --stat-color: #1d5fd1;
+}
+
+/* Icon first, label beside it on one line */
 .stat dt {
-  font-size: clamp(11px, 3.3cqi, 15px);
-  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 0.45em;
+  font-size: clamp(11px, 3.4cqi, 14.5px);
+  font-weight: 600;
+  line-height: 1.1;
   color: #2f3747;
 }
 
+/* Solid icon in the row's colour, sized with the card */
+.statIcon {
+  display: block;
+  flex: none;
+  width: clamp(12px, 4.2cqi, 17px);
+  height: clamp(12px, 4.2cqi, 17px);
+  color: var(--stat-color);
+}
+
 .stat dd {
-  margin: 0.2em 0 0;
-  font-size: clamp(11.5px, 4cqi, 21px);
+  margin: 0;
+  font-size: clamp(12px, 3.8cqi, 16.5px);
   font-weight: 700;
-  line-height: 1.15;
+  line-height: 1.1;
   letter-spacing: -0.01em;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -314,14 +503,4 @@
 
 .net {
   color: #0d1117;
-}
-
-.srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0 0 0 0);
-  white-space: nowrap;
 }

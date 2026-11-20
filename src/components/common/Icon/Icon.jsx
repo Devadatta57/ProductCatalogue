@@ -94,6 +94,65 @@ const paths = {
     </>
   ),
 
+  /* ---- Trade figures on sheet cards ---- */
+  /*
+   * data-part marks the pieces a parent can animate (see SheetCard.module.css):
+   * ship / waves, rope / load, beam.
+   */
+  // Export: cargo ship loaded with containers, on a wave line
+  tradeExport: (
+    <>
+      <g data-part="ship">
+        <g fill="currentColor" stroke="none">
+          <rect x="3.5" y="8.3" width="4.6" height="3.7" rx="0.5" />
+          <rect x="8.8" y="8.3" width="4.6" height="3.7" rx="0.5" />
+          <rect x="6.1" y="4" width="4.6" height="3.7" rx="0.5" />
+          <rect x="14.6" y="5.6" width="4.4" height="6.4" rx="0.6" />
+          <rect x="16.1" y="2" width="1.4" height="3.6" />
+          <path d="M1.5 13h21l-2.7 5.4a1.4 1.4 0 0 1-1.25.8H5.45a1.4 1.4 0 0 1-1.25-.8z" />
+        </g>
+        <g fill="var(--color-white, #fff)" stroke="none">
+          <circle cx="16.8" cy="15.6" r="0.9" />
+          <circle cx="19.4" cy="15.6" r="0.9" />
+          <rect x="15.6" y="7" width="2.4" height="1.6" rx="0.3" />
+        </g>
+      </g>
+      <path
+        data-part="waves"
+        d="M-4 22c1.5 0 1.5-1.2 3-1.2s1.5 1.2 3 1.2 1.5-1.2 3-1.2 1.5 1.2 3 1.2 1.5-1.2 3-1.2 1.5 1.2 3 1.2 1.5-1.2 3-1.2 1.5 1.2 3 1.2 1.5-1.2 3-1.2 1.5 1.2 3 1.2"
+        strokeWidth="1.5"
+      />
+    </>
+  ),
+  // Import: container hanging from a crane hook
+  tradeImport: (
+    <>
+      <path data-part="rope" d="M12 1v3.6" strokeWidth="1.6" />
+      <g data-part="load">
+        <path d="M12 4.6 4.5 8.6M12 4.6l7.5 4" strokeWidth="1.6" />
+        <rect x="3.2" y="8.6" width="17.6" height="11" rx="1.2" strokeWidth="2" />
+        <path d="M7 11.6v5M10.3 11.6v5M13.7 11.6v5M17 11.6v5" strokeWidth="1.8" />
+      </g>
+    </>
+  ),
+  // Net: balance scale; the beam (with strings and pans) tips about its pivot
+  tradeNet: (
+    <>
+      <g data-part="beam">
+        <path d="M5.2 7.6 2.4 13.6M5.2 7.6 8 13.6M18.8 7.6l-2.8 6M18.8 7.6l2.8 6" strokeWidth="1.3" />
+        <g fill="currentColor" stroke="none">
+          <rect x="3.6" y="6.4" width="16.8" height="1.8" rx="0.9" />
+          <path d="M1.4 13.4h7.6a3.8 3.8 0 0 1-7.6 0zM15 13.4h7.6a3.8 3.8 0 0 1-7.6 0z" />
+        </g>
+      </g>
+      <g fill="currentColor" stroke="none">
+        <circle cx="12" cy="4" r="1.8" />
+        <rect x="11" y="4" width="2" height="15.5" />
+        <path d="M7 19.2h10a1 1 0 0 1 1 1v1.3H6v-1.3a1 1 0 0 1 1-1z" />
+      </g>
+    </>
+  ),
+
   /* ---- Product groups (solid glyphs) ---- */
   allGroups: (
     <g fill="currentColor" stroke="none">

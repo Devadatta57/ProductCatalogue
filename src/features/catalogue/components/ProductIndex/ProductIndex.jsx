@@ -72,16 +72,14 @@ function downloadCsv(rows) {
 
 export default function ProductIndex({
   query = '',
-  // When given, the page shows its own search box (own-page use)
-  searchValue,
-  onSearchChange,
   groups,
   activeGroup,
   onGroupChange,
-  compareIds,
-  compareLimit,
+  compareIds = [],
+  compareLimit = 6,
   onToggleCompare,
 }) {
+  const compareFull = compareIds.length >= compareLimit;
   const [type, setType] = useState('all');
   const [sortBy, setSortBy] = useState({ id: 'hsn', dir: 1 });
   // { n, hsn } of the sheet open in the viewer
@@ -129,20 +127,6 @@ export default function ProductIndex({
       />
 
       <div className={styles.controls}>
-        {onSearchChange && (
-          <label className={styles.search}>
-            <Icon name="search" size={17} strokeWidth={2.4} />
-            <input
-              type="search"
-              value={searchValue}
-              onChange={(event) => onSearchChange(event.target.value)}
-              placeholder="Search product, family or HSN code"
-              aria-label="Search product, family or HSN code"
-              autoComplete="off"
-            />
-          </label>
-        )}
-
         <label className={styles.typeLabel}>
           <span>Type:</span>
           <span className={styles.select}>
@@ -214,19 +198,20 @@ export default function ProductIndex({
                   </th>
                 );
               })}
+              <th className={styles.compareCol}>Compare</th>
             </tr>
           </thead>
           <tbody>
             {rows.length === 0 ? (
               <tr>
-                <td colSpan={columns.length} className={styles.empty}>
+                <td colSpan={columns.length + 1} className={styles.empty}>
                   <b>No product found</b>
                   Try a different name or the first digits of an HSN code.
                 </td>
               </tr>
             ) : (
               rows.map((row) => (
-                <tr key={row.hsn}>
+                <tr key={row.hsn} data-compared={row.sheets.some((n) => compareIds.includes(n))}>
                   <td className={styles.hsn}>
                     <Highlight text={row.hsn} query={parsed} />
                   </td>
@@ -264,6 +249,28 @@ export default function ProductIndex({
                           </span>
                         </span>
                       ))}
+                    </span>
+                  </td>
+                  <td className={styles.compareCol}>
+                    {/* One tick per product family, lined up with the names beside it */}
+                    <span className={styles.compareStack}>
+                      {row.sheets.map((n) => {
+                        const compared = compareIds.includes(n);
+                        const disabled = !compared && compareFull;
+                        return (
+                          <span key={n} className={styles.compareCell}>
+                            <input
+                              type="checkbox"
+                              className={styles.check}
+                              checked={compared}
+                              disabled={disabled}
+                              onChange={() => onToggleCompare?.(n)}
+                              title={disabled ? `Compare holds up to ${compareLimit} product families` : undefined}
+                              aria-label={`Compare ${sheetNumber(n)} ${sheetsByN[n].name}`}
+                            />
+                          </span>
+                        );
+                      })}
                     </span>
                   </td>
                 </tr>

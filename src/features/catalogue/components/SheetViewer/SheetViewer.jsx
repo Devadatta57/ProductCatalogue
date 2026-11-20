@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Icon from '@/components/common/Icon';
-import { SHOW_COMPARE_IN_VIEWER } from '../../config/visibility';
 import { sheetImages } from '../../data/sheetImages';
 import { formatRupees, sheetNumber } from '../../utils/formatters';
 import styles from './SheetViewer.module.css';
@@ -359,18 +358,16 @@ export default function SheetViewer({
             </button>
           </div>
 
-          {SHOW_COMPARE_IN_VIEWER && (
-            <button
-              type="button"
-              className={styles.compareBtn}
-              onClick={toggleCompare}
-              aria-pressed={inCompare}
-              title={inCompare ? 'Remove from compare' : 'Add to compare'}
-            >
-              <Icon name={inCompare ? 'check' : 'compare'} size={17} strokeWidth={2.2} />
-              <span className={styles.toolText}>{inCompare ? 'In compare' : 'Compare'}</span>
-            </button>
-          )}
+          <button
+            type="button"
+            className={styles.compareBtn}
+            onClick={toggleCompare}
+            aria-pressed={inCompare}
+            title={inCompare ? 'Remove from compare' : 'Add to compare'}
+          >
+            <Icon name={inCompare ? 'check' : 'compare'} size={17} strokeWidth={2.2} />
+            <span className={styles.toolText}>{inCompare ? 'In compare' : 'Compare'}</span>
+          </button>
 
           <button
             type="button"

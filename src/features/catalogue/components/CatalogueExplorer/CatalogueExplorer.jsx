@@ -33,10 +33,8 @@ export default function CatalogueExplorer() {
   const [query, setQuery] = useState('');
   const [sort, setSort] = useState(sortOptions[0].value);
   const [activeGroup, setActiveGroup] = useState('all');
-  // Product Index tab: its own search box and group filter
-  const [indexQuery, setIndexQuery] = useState('');
+  // Product Index tab: its own group filter
   const [indexGroup, setIndexGroup] = useState('all');
-  const deferredIndexQuery = useDeferredValue(indexQuery);
   // Product families shown as cards ('grid') or as a table ('list')
   const [view, setView] = useState('grid');
   // Product families ticked for Compare (shared with the table page)
@@ -74,8 +72,6 @@ export default function CatalogueExplorer() {
   const counts = { ...catalogueTotals, compare: compareIds.length };
 
   const handleTabChange = (tabId) => {
-    // Tabs switched off in config/visibility.js stay on screen but don't navigate
-    if (catalogueTabs.find((tab) => tab.id === tabId)?.enabled === false) return;
     setActiveTab(tabId);
     scrollToResults();
   };
@@ -109,9 +105,6 @@ export default function CatalogueExplorer() {
 
       {showProducts ? (
         <ProductIndex
-          query={deferredIndexQuery}
-          searchValue={indexQuery}
-          onSearchChange={setIndexQuery}
           groups={productGroups}
           activeGroup={indexGroup}
           onGroupChange={setIndexGroup}

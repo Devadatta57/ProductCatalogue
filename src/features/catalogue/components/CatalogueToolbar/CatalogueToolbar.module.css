@@ -24,19 +24,70 @@
   margin-left: auto;
 }
 
-/* Section buttons sit on a dark green strip that fills the whole row */
+/* Section buttons sit inside one outlined light-green capsule (segmented control) */
 .tabs {
   flex: 1 1 100%;
   min-width: 0;
-  padding: 8px;
+  gap: 4px;
+  padding: 6px;
   border-radius: var(--radius-pill);
-  background: var(--color-green-900);
-  box-shadow: 0 8px 18px -10px rgba(15, 61, 26, 0.6);
+  /* White blending into yellow-capsicum gold */
+  background: linear-gradient(180deg, #ffe070 0%, #ffd84a 100%);
+  /* Soft yellow glow around the box, no outline */
+  box-shadow:
+    0 0 14px rgba(255, 200, 0, 0.45),
+    0 6px 14px -8px rgba(190, 140, 0, 0.5);
 }
 
-/* The three buttons share the strip's width equally */
+/* The three buttons share the row's width equally, and are larger than other pills */
 .tabs > .pill {
   flex: 1 1 0;
+  height: 54px;
+  padding: 0 22px;
+  gap: 9px;
+  font-size: 18px;
+}
+
+.tabs > .pill svg {
+  width: 21px;
+  height: 21px;
+}
+
+.tabs > .pill .badge {
+  min-width: 30px;
+  height: 28px;
+  font-size: 15px;
+}
+
+/* Inside the capsule: unselected items are flat dark text on the green */
+.tabs > .pill {
+  background: transparent;
+  color: #4a3300;
+  box-shadow: none;
+}
+
+.tabs > .pill:hover {
+  transform: none;
+  box-shadow: none;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* Unselected badges: deep capsicum amber so they stand out on the yellow */
+.tabs > .pill .badge {
+  background: #e08a00;
+  color: var(--color-white);
+}
+
+.tabs > .pill[aria-pressed='true'] .badge {
+  background: var(--color-amber-400);
+  color: var(--color-white);
+}
+
+/* Selected item: blue pill lifted off the green with a soft shadow */
+.tabs > .pill[aria-pressed='true'] {
+  background: linear-gradient(180deg, var(--color-blue-400) 0%, var(--color-blue-500) 55%, #0572f2 100%);
+  color: var(--color-white);
+  box-shadow: 0 6px 12px -6px rgba(0, 90, 220, 0.6);
 }
 
 /* ---------- Pill button: light green, blue once selected ---------- */
@@ -245,13 +296,10 @@
     row-gap: 10px;
   }
 
-  /* Tabs scroll sideways; padding keeps the glow from being clipped */
-  /* Full-width green strip; buttons scroll sideways inside it */
+  /* Full-width row; buttons scroll sideways, padding keeps their shadow from being clipped */
   .tabs {
-    width: calc(100% + 32px);
-    margin: -4px -16px 0;
-    padding: 8px 16px;
-    border-radius: 0;
+    width: 100%;
+    padding: 5px;
     overflow-x: auto;
     scrollbar-width: none;
   }
@@ -259,6 +307,9 @@
   /* Never squash a label: fill the strip, scroll if they don't fit */
   .tabs > .pill {
     flex: 1 0 auto;
+    height: 48px;
+    padding: 0 18px;
+    font-size: 16px;
   }
 
   .tabs::-webkit-scrollbar {

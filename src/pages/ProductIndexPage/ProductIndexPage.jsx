@@ -1,4 +1,4 @@
-import { useDeferredValue, useState } from 'react';
+import { useState } from 'react';
 import Icon from '@/components/common/Icon';
 import { backToHome } from '@/hooks/useHashRoute';
 import ProductIndex from '@/features/catalogue/components/ProductIndex';
@@ -11,9 +11,7 @@ import styles from './ProductIndexPage.module.css';
  * page's "Product Index" tab: a Back button and the index.
  */
 export default function ProductIndexPage() {
-  const [query, setQuery] = useState('');
   const [activeGroup, setActiveGroup] = useState('all');
-  const deferredQuery = useDeferredValue(query);
   const { compareIds, toggleCompare, compareLimit } = useCompare();
 
   return (
@@ -24,9 +22,6 @@ export default function ProductIndexPage() {
       </button>
 
       <ProductIndex
-        query={deferredQuery}
-        searchValue={query}
-        onSearchChange={setQuery}
         groups={productGroups}
         activeGroup={activeGroup}
         onGroupChange={setActiveGroup}
