@@ -97,6 +97,13 @@
   color: #10192b;
 }
 
+/* Very wide screens (1440p, 4K): 4 per row so cards don't grow huge */
+@media (min-width: 2000px) {
+  .grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
 /* Tablet: 2 per row */
 @media (max-width: 999px) {
   .grid {

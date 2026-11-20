@@ -26,6 +26,11 @@
   font: 500 16px/1 var(--font-sans);
 }
 
+/* Sort dropdown: only on tablets / phones, where the column headings are hidden */
+.sortLabel {
+  display: none;
+}
+
 .select {
   position: relative;
   display: inline-flex;
@@ -407,19 +412,261 @@
   font-size: 15px;
 }
 
+/* ---------- Laptops (≤1400px): tighter cells so every column fits ---------- */
+@media (max-width: 1400px) {
+  .table {
+    min-width: 820px;
+    font-size: 13.5px;
+  }
+
+  .table th,
+  .table td {
+    padding: 7px 8px;
+  }
+
+  .table tr > :first-child {
+    padding-left: 12px;
+  }
+
+  /* Product and family names shrink (ending in "…") instead of widening the table */
+  .product {
+    max-width: 0;
+    width: 38%;
+  }
+
+  .sheetCol {
+    max-width: 0;
+    width: 30%;
+    padding-left: 10px !important;
+  }
+
+  .num,
+  .netCol {
+    width: auto;
+  }
+
+  .compareCol {
+    width: 76px;
+  }
+
+  .type {
+    min-width: 0;
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+/*
+ * Tablets and phones (≤1000px): each product becomes a small card instead of
+ * a wide table row: HSN + type, name, the three figures, then the family
+ * links with their Compare ticks. Two cards per row on tablets, one on phones.
+ */
+@media (max-width: 1000px) {
+  .sortLabel {
+    display: inline-flex;
+  }
+
+  .tableWrap {
+    overflow: visible;
+    margin: 0;
+    padding: 0;
+  }
+
+  .table {
+    display: block;
+    min-width: 0;
+  }
+
+  .table thead {
+    display: none;
+  }
+
+  .table tbody {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  /* Three equal columns, so Export / Import / Net always get a third of the card each */
+  .table tbody tr {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-areas:
+      'hsn hsn type'
+      'name name name'
+      'exp imp net'
+      'fam fam cmp';
+    align-content: start;
+    gap: 8px 12px;
+    padding: 12px 14px;
+    border-radius: 14px;
+    background: #fff;
+  }
+
+  .table tbody tr[data-compared='true'] {
+    background: #eef5ff;
+  }
+
+  /* No grow-on-hover on touch screens */
+  .table tbody tr:hover {
+    transform: none;
+    filter: none;
+  }
+
+  /* Undo the table-row cell look (!important because the desktop rules use it) */
+  .table tbody td {
+    height: auto;
+    padding: 0 !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    background: none;
+    box-shadow: none;
+  }
+
+  .table tbody tr:has(td.empty) {
+    display: block;
+    grid-column: 1 / -1;
+  }
+
+  .table tbody td.empty {
+    display: block;
+    padding: 28px 16px !important;
+  }
+
+  .hsn {
+    grid-area: hsn;
+    width: auto;
+    font-size: 15px;
+  }
+
+  .typeCell {
+    grid-area: type;
+    justify-self: end;
+  }
+
+  .product {
+    grid-area: name;
+    width: auto;
+    max-width: none;
+    overflow: visible;
+    font-weight: 500;
+    line-height: 1.35;
+    white-space: normal;
+  }
+
+  .exp {
+    grid-area: exp;
+  }
+
+  .imp {
+    grid-area: imp;
+  }
+
+  .netCol {
+    grid-area: net;
+  }
+
+  .sheetCol {
+    grid-area: fam;
+    width: auto;
+    max-width: none;
+  }
+
+  .compareCol {
+    grid-area: cmp;
+    justify-self: end;
+    width: auto;
+  }
+
+  .table td.num {
+    width: auto;
+    text-align: left !important;
+  }
+
+  /* Small grey caption above each figure, the family links and the ticks */
+  .table td[data-label]::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    color: #5b6882;
+    font-size: 11px;
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  /* A thin rule separates the family links (and their ticks) from the figures */
+  .table tbody td.sheetCol,
+  .table tbody td.compareCol {
+    padding-top: 10px !important;
+    border-top: 1px solid #e3e9f2 !important;
+  }
+
+  /* Bigger tick for fingers */
+  .check {
+    width: 22px;
+    height: 22px;
+  }
+}
+
 @media (max-width: 640px) {
   .page {
     margin: 4px calc(-1 * var(--gutter, 16px)) 0;
     border-radius: 0;
   }
 
-  .typeLabel {
-    flex: 1 1 100%;
-    justify-content: space-between;
+  .controls {
+    gap: 10px;
   }
 
-  .select,
-  .select select {
+  /* Each dropdown on its own full-width row, labels lined up */
+  .typeLabel {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .typeLabel > span:first-child {
+    flex: none;
+    width: 52px;
+  }
+
+  /* Long group names can't push the page wider than the screen */
+  .select {
     flex: 1;
+    min-width: 0;
+  }
+
+  .select select {
+    width: 100%;
+    min-width: 0;
+    text-overflow: ellipsis;
+  }
+
+  .download {
+    flex: 1 1 100%;
+    justify-content: center;
+    margin-left: 0;
+  }
+
+  .table tbody {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* Small phones (≤400px): slightly smaller captions and figures so three fit side by side */
+@media (max-width: 400px) {
+  .table tbody tr {
+    column-gap: 8px;
+  }
+
+  .table td[data-label]::before {
+    font-size: 10px;
+    letter-spacing: 0;
+  }
+
+  .table td.num {
+    font-size: 13px;
   }
 }

@@ -659,4 +659,54 @@
     width: 38px;
     height: 38px;
   }
+
+  /* The whole panel scrolls (not a small box inside it), so the list gets room */
+  .panel {
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  .tableWrap {
+    flex: none;
+    overflow: visible;
+  }
+
+  /* Headings stick to the top of the scrolling panel */
+  .table th {
+    top: -1px;
+  }
+}
+
+/* Phones: one row of tools. Prev / next stay as the arrows on the image. */
+@media (max-width: 480px) {
+  .stepGroup,
+  .actualBtn {
+    display: none !important;
+  }
+
+  .tools {
+    gap: 8px;
+  }
+
+  .kpis {
+    gap: 6px;
+  }
+
+  .kpis > div {
+    padding: 8px;
+  }
+
+  .kpis dd {
+    font-size: 12.5px;
+    white-space: normal;
+  }
+
+  .table th,
+  .table td {
+    padding: 8px 6px;
+  }
+
+  .copy {
+    margin-left: 2px;
+  }
 }

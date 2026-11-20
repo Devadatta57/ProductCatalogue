@@ -1,0 +1,96 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>All Screen Sizes</title>
+<!--
+  Dev helper (not part of the built app): open http://localhost:<dev port>/dev/screens.html
+  while `npm run dev` is running. The live app at each screen size, one after another,
+  smallest to largest. Scroll and click inside any screen.
+-->
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: #eef1f5;
+    color: #13213a;
+    font: 13px/1.4 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  }
+  main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    padding: 16px;
+  }
+  figure { margin: 0; }
+  figcaption {
+    margin-bottom: 6px;
+    color: #5d6b82;
+    font-weight: 600;
+  }
+  .screen {
+    position: relative;
+    overflow: hidden;
+    border: 6px solid #1b2433;
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 10px 24px -10px rgba(10, 30, 70, .45);
+  }
+  .screen iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    border: 0;
+    transform-origin: 0 0;
+    background: #fff;
+  }
+</style>
+</head>
+<body>
+<main id="main"></main>
+<script>
+  const screens = [
+    ['Small phone', 320, 568],
+    ['Android phone', 360, 800],
+    ['iPhone', 390, 844],
+    ['Large phone', 430, 932],
+    ['iPad portrait', 768, 1024],
+    ['iPad Air portrait', 820, 1180],
+    ['iPad landscape', 1024, 768],
+    ['Small laptop', 1280, 800],
+    ['Laptop', 1366, 768],
+    ['MacBook', 1440, 900],
+    ['Full HD monitor', 1920, 1080],
+    ['2K monitor', 2560, 1440],
+  ];
+
+  const main = document.getElementById('main');
+  const frames = screens.map(([name, w, h]) => {
+    const fig = document.createElement('figure');
+    fig.innerHTML = `<figcaption>${name} · ${w} × ${h}</figcaption><div class="screen"><iframe title="${name} ${w} by ${h}"></iframe></div>`;
+    const iframe = fig.querySelector('iframe');
+    iframe.width = w;
+    iframe.height = h;
+    iframe.src = '/';
+    main.appendChild(fig);
+    return { w, h, box: fig.querySelector('.screen'), iframe };
+  });
+
+  // Real size when it fits the window; bigger screens are shrunk to the window's width
+  function layout() {
+    const avail = main.clientWidth - 32 - 12; // page padding + frame border
+    for (const f of frames) {
+      const s = Math.min(avail / f.w, 1);
+      f.box.style.width = `${Math.round(f.w * s) + 12}px`;
+      f.box.style.height = `${Math.round(f.h * s) + 12}px`;
+      f.iframe.style.transform = `scale(${s})`;
+    }
+  }
+
+  window.addEventListener('resize', layout);
+  layout();
+</script>
+</body>
+</html>

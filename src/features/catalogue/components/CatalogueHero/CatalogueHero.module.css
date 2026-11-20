@@ -179,6 +179,10 @@
     width: 118%;
     max-width: none;
     height: auto;
+    /* Tablets: keep the food spread under ~60% of the screen so the page below shows sooner */
+    max-height: 58svh;
+    object-fit: contain;
+    object-position: center bottom;
     margin: 12px 0 0 -9%;
   }
 

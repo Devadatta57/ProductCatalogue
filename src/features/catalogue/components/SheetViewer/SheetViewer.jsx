@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import Icon from '@/components/common/Icon';
 import { sheetImages } from '../../data/sheetImages';
 import { formatRupees, sheetNumber } from '../../utils/formatters';
@@ -259,13 +259,16 @@ export default function SheetViewer({
     return sheet.products.filter((p) => !f || `${p.hsn} ${p.name} ${p.type}`.toLowerCase().includes(f));
   }, [sheet, filter]);
 
-  // Bring the clicked HSN into view inside the table only (not the whole dialog)
+  // Bring the clicked HSN into view inside the products list only (not the whole dialog).
+  // Wide screens: the table scrolls on its own. Phones: the whole panel scrolls.
   const tableWrapRef = useRef(null);
   useEffect(() => {
     const row = markedRef.current;
     const wrap = tableWrapRef.current;
     if (!row || !wrap) return;
-    wrap.scrollTop = row.offsetTop - wrap.clientHeight / 2 + row.offsetHeight / 2;
+    const box = wrap.scrollHeight > wrap.clientHeight ? wrap : wrap.parentElement;
+    const rowTop = row.getBoundingClientRect().top - box.getBoundingClientRect().top + box.scrollTop;
+    box.scrollTop = rowTop - box.clientHeight / 2 + row.offsetHeight / 2;
   }, [n, hsn]);
 
   /* ---------- open / close + keyboard ---------- */
@@ -274,7 +277,8 @@ export default function SheetViewer({
     onCloseRef.current = onClose;
   });
 
-  useEffect(() => {
+  // Layout effect: the dialog must be open (laid out) before the effects above measure rows
+  useLayoutEffect(() => {
     const dialog = dialogRef.current;
     if (!dialog.open) dialog.showModal();
     const { overflow } = document.body.style;
@@ -330,7 +334,7 @@ export default function SheetViewer({
         </div>
 
         <div className={styles.tools}>
-          <div className={styles.toolGroup} role="group" aria-label="Product families">
+          <div className={`${styles.toolGroup} ${styles.stepGroup}`} role="group" aria-label="Product families">
             <button type="button" onClick={() => step(-1)} disabled={list.length < 2} title="Previous (←)" aria-label="Previous product family">
               <Icon name="chevronLeft" size={18} strokeWidth={2.4} />
             </button>
@@ -353,8 +357,9 @@ export default function SheetViewer({
               <Icon name="fit" size={17} strokeWidth={2.2} />
               <span className={styles.toolText}>Fit</span>
             </button>
-            <button type="button" onClick={actualSize} title="Actual size">
-              <span className={styles.toolText}>100%</span>
+            {/* "100%" is short, so it keeps its text on tablets (hidden on phones) */}
+            <button type="button" className={styles.actualBtn} onClick={actualSize} title="Actual size">
+              <span>100%</span>
             </button>
           </div>
 

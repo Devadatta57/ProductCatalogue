@@ -41,6 +41,17 @@ const comparators = {
   net: (a, b) => a.net - b.net,
 };
 
+/* Phones / tablets: column headings are hidden there, so sorting moves into a dropdown */
+const sortWords = { hsn: ['0 → 9', '9 → 0'], sheet: ['01 → 56', '56 → 01'] };
+const sortChoices = columns.flatMap((col) => {
+  const dir = col.numeric ? -1 : 1;
+  const [first, second] = col.numeric ? ['high → low', 'low → high'] : (sortWords[col.id] ?? ['A → Z', 'Z → A']);
+  return [
+    { value: `${col.id}:${dir}`, label: `${col.label}: ${first}` },
+    { value: `${col.id}:${-dir}`, label: `${col.label}: ${second}` },
+  ];
+});
+
 const inr = new Intl.NumberFormat('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 const formatCr = (value) => inr.format(value);
 
@@ -156,6 +167,26 @@ export default function ProductIndex({
           </span>
         </label>
 
+        <label className={`${styles.typeLabel} ${styles.sortLabel}`}>
+          <span>Sort:</span>
+          <span className={styles.select}>
+            <select
+              value={`${sortBy.id}:${sortBy.dir}`}
+              onChange={(event) => {
+                const [id, dir] = event.target.value.split(':');
+                setSortBy({ id, dir: Number(dir) });
+              }}
+            >
+              {sortChoices.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </select>
+            <Icon name="chevronDown" size={16} strokeWidth={2.6} className={styles.chevron} />
+          </span>
+        </label>
+
         <button type="button" className={styles.download} onClick={() => downloadCsv(rows)}>
           <Icon name="download" size={18} strokeWidth={2.4} />
           <span>Download this list (CSV)</span>
@@ -218,19 +249,24 @@ export default function ProductIndex({
                   <td className={styles.product} title={row.name}>
                     <Highlight text={row.name} query={parsed} />
                   </td>
-                  <td>
+                  <td className={styles.typeCell}>
                     <span className={styles.type} data-type={row.type}>
                       {row.type}
                     </span>
                   </td>
-                  <td className={styles.num}>{formatCr(row.exp)}</td>
-                  <td className={styles.num}>{formatCr(row.imp)}</td>
-                  <td className={`${styles.num} ${styles.netCol}`}>
+                  {/* data-label: caption shown above each figure in the phone card layout */}
+                  <td className={`${styles.num} ${styles.exp}`} data-label="Export ₹ Cr">
+                    {formatCr(row.exp)}
+                  </td>
+                  <td className={`${styles.num} ${styles.imp}`} data-label="Import ₹ Cr">
+                    {formatCr(row.imp)}
+                  </td>
+                  <td className={`${styles.num} ${styles.netCol}`} data-label="Net ₹ Cr">
                     <span className={styles.net} data-negative={row.net < 0}>
                       {formatCr(row.net)}
                     </span>
                   </td>
-                  <td className={styles.sheetCol}>
+                  <td className={styles.sheetCol} data-label="Product family">
                     <span className={styles.sheets}>
                       {/* Only the eye icon opens the sheet; the name is plain text */}
                       {row.sheets.map((n) => (
@@ -244,14 +280,14 @@ export default function ProductIndex({
                           >
                             <Icon name="eye" size={15} strokeWidth={2} />
                           </button>
-                          <span className={styles.sheetName}>
+                          <span className={styles.sheetName} title={`${sheetNumber(n)} ${sheetsByN[n].name}`}>
                             {sheetNumber(n)} {sheetsByN[n].name}
                           </span>
                         </span>
                       ))}
                     </span>
                   </td>
-                  <td className={styles.compareCol}>
+                  <td className={styles.compareCol} data-label="Compare">
                     {/* One tick per product family, lined up with the names beside it */}
                     <span className={styles.compareStack}>
                       {row.sheets.map((n) => {

@@ -283,10 +283,62 @@
   white-space: nowrap;
 }
 
+/* ---------- Tablet: tighter tab buttons so all three still fit on one row ---------- */
+@media (max-width: 1000px) {
+  .tabs > .pill {
+    padding: 0 12px;
+    gap: 7px;
+    font-size: 16px;
+  }
+}
+
+/*
+ * Phone: all three tabs stay on screen (no sideways scrolling). Icon above
+ * the label (which may wrap to two lines), count badge in the top corner.
+ */
+@media (max-width: 720px) {
+  .tabs {
+    width: 100%;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 24px;
+  }
+
+  .tabs > .pill {
+    flex: 1 1 0;
+    min-width: 0;
+    flex-direction: column;
+    gap: 4px;
+    height: auto;
+    min-height: 60px;
+    padding: 8px 6px;
+    border-radius: 19px;
+    font-size: 13.5px;
+    line-height: 1.15;
+    white-space: normal;
+    text-align: center;
+  }
+
+  .tabs > .pill svg {
+    width: 19px;
+    height: 19px;
+  }
+
+  .tabs > .pill .badge {
+    position: absolute;
+    top: 5px;
+    right: 6px;
+    min-width: 22px;
+    height: 18px;
+    margin: 0;
+    padding: 0 6px;
+    font-size: 11px;
+  }
+}
+
 /* ---------- Phone ---------- */
 @media (max-width: 640px) {
   .toolbar,
-  .tabs,
   .controls,
   .views {
     gap: 8px;
@@ -294,26 +346,6 @@
 
   .toolbar {
     row-gap: 10px;
-  }
-
-  /* Full-width row; buttons scroll sideways, padding keeps their shadow from being clipped */
-  .tabs {
-    width: 100%;
-    padding: 5px;
-    overflow-x: auto;
-    scrollbar-width: none;
-  }
-
-  /* Never squash a label: fill the strip, scroll if they don't fit */
-  .tabs > .pill {
-    flex: 1 0 auto;
-    height: 48px;
-    padding: 0 18px;
-    font-size: 16px;
-  }
-
-  .tabs::-webkit-scrollbar {
-    display: none;
   }
 
   .search {
